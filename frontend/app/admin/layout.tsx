@@ -1,14 +1,16 @@
-//import Navbar from "@/components/customer/Navbar";
-//import Footer from "@/components/customer/Footer";
+import { notFound } from "next/navigation";
+import { getCurrentUser } from "@/lib/auth/session";
 
-export default function CustomerLayout({
-                                         children,
-                                       }: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-      <>
-        <main>{children}</main>
-      </>
-  );
+export default async function AdminLayout({
+                                              children,
+                                          }: {
+    children: React.ReactNode;
+}) {
+    const user = await getCurrentUser();
+
+    if (!user || user.role !== "admin") {
+        notFound();
+    }
+
+    return <>{children}</>;
 }
